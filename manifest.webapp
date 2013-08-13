@@ -1,0 +1,15 @@
+{
+    "name": "Meteotest",
+    "description": "Meteo test",
+    "launch_path": "index.html",
+    "installs_allowed_from": ["*"],
+    "version": "0.0.1",
+    "developer": {
+        "name": "Krzysztof Adamski",
+        "url": "http://k.japko.eu/"
+    },
+    "type" : "privileged",
+    "permissions": {
+        "systemXHR":{}
+    }
+}
