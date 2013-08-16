@@ -6,9 +6,34 @@
     <title></title>
     <meta name="description" content="Meteo test">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" /> 
+    <link href="Building-Blocks/style/headers.css" rel="stylesheet">
+    <link href="Building-Blocks/style_unstable/drawer.css" rel="stylesheet"> 
+    <link href="style/app.css" rel="stylesheet">
   </head>
   <body>
-    <img id=img style='max-width: 100%'>
+    <section data-type="sidebar">
+      <header>
+        <h1 id="sidebar_title">Cities:</h1>
+      </header>
+      <nav>
+        <ul id="citiesUl">
+        </ul>
+        <h2>Subtitle</h2>
+        <ul>
+        </ul>
+      </nav>
+    </section>
+  
+    <section id="drawer" role="region">
+      <header>
+        <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
+        <a href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+        <h1 id="mainTitle"></h1>
+      </header>
+      <div role="main" id="mainDiv">
+      </div>
+    </section>
+
     <script type="text/javascript" src="app.js"></script>
   </body>
 </html>

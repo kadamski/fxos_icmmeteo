@@ -20,7 +20,7 @@ function createFrame() {
         };
         screen.addEventListener("mozorientationchange", _orientChange);
         _orientChange();
-        document.body.appendChild(frame);
+        document.getElementById('mainDiv').appendChild(frame);
     }
     return frame;
 }
@@ -77,7 +77,17 @@ function setPosition(row, col) {
     showImage();
 }
 
+function addCities() {
+    var ul=document.getElementById('citiesUl');
+    var cityNames=Object.keys(cities).sort();
+    for(var i=0, len=cityNames.length; i<len; i++) {
+        var c=cityNames[i];
+        ul.innerHTML+='<li><a href="#" onclick=\'setCity("'+c+'")\'>'+c+'</a></li>';
+    }
+}
+
 function setCity(city) {
+    document.getElementById('mainTitle').innerHTML=city;
     setPosition.apply(null, cities[city]);
 }
 
@@ -88,8 +98,8 @@ function handleVisibilityChange() {
     showImage();
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    addCities();
     setCity('Wrocław');
 })
