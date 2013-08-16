@@ -31,8 +31,9 @@ function createFrame() {
         frame.setAttribute('lastCol', '-1');
         frame.style.border='none';
         function _orientChange() {
+            var header=document.getElementById('sidebar_title');
             frame.style.width=window.screen.width+'px';
-            frame.style.height=window.screen.height+'px';
+            frame.style.height=(window.screen.height-header.clientHeight-10)+'px';
         };
         screen.addEventListener("mozorientationchange", _orientChange);
         _orientChange();
