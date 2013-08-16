@@ -1,7 +1,23 @@
 var UPDATE_INTERVAL=(1000*60*60);   // 1h
 var cities={
     'Białystok': [379, 285],
+    'Bydgoszcz': [381, 199],
+    'Gdańsk': [346, 210],
+    'Gorzów Wielkopolski': [390, 152],
+    'Katowice': [461, 215],
+    'Kielce': [443, 244],
+    'Kraków': [466, 232],
+    'Lublin': [432, 277],
+    'Łódź': [418, 223],
+    'Olsztyn': [363, 240],
+    'Opole': [449, 196],
+    'Poznań': [400, 180],
+    'Rzeszów': [465, 269],
+    'Szczecin': [370, 142],
+    'Toruń': [383, 209],
+    'Warszawa': [406, 250],
     'Wrocław': [436, 181],
+    'Zielona Góra': [412, 155]
 }
 
 function createFrame() {
