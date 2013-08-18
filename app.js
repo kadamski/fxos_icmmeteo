@@ -1,3 +1,5 @@
+var MGRAM_URL='http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang=pl';
+var DATE_URL='http://www.meteo.pl/meteorogram_um_js.php'
 var UPDATE_INTERVAL=(1000*60*60);   // 1h
 var cities={
     'Białystok': [379, 285],
@@ -51,7 +53,7 @@ function loadImage(frame, date, row, col) {
     }
 
     frame.setAttribute('lastDate', date);
-    frame.src='http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate='+date+'&row='+row+'&col='+col+'&lang=pl';
+    frame.src=MGRAM_URL.format(date, row, col);
 }
 
 function showImage() {
@@ -67,7 +69,7 @@ function showImage() {
     }
 
     var xmlhttp=new XMLHttpRequest({mozSystem: true});
-    xmlhttp.open("GET",'http://www.meteo.pl/meteorogram_um_js.php',true);
+    xmlhttp.open("GET", DATE_URL, true);
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
             var date=/UM_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
@@ -99,7 +101,7 @@ function addCities() {
     var cityNames=Object.keys(cities).sort();
     for(var i=0, len=cityNames.length; i<len; i++) {
         var c=cityNames[i];
-        ul.innerHTML+='<li><a href="#" onclick=\'setCity("'+c+'")\'>'+c+'</a></li>';
+        ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c);
     }
 }
 
