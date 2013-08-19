@@ -36,7 +36,7 @@ var curModel='um';
 function createFrame() {
     var frame=document.getElementById('frame');
     if(!frame) {
-        var frame=document.createElement("IFRAME");
+        var frame=document.createElement('IFRAME');
         frame.setAttribute('id', 'frame');
         frame.setAttribute('lastDate', '0');
         frame.setAttribute('lastUpdate', '0');
@@ -48,7 +48,7 @@ function createFrame() {
             frame.style.width=window.screen.width+'px';
             frame.style.height=(window.screen.height-header.clientHeight-10)+'px';
         };
-        screen.addEventListener("mozorientationchange", _orientChange);
+        screen.addEventListener('mozorientationchange', _orientChange);
         _orientChange();
         document.getElementById('mainDiv').appendChild(frame);
     }
@@ -59,7 +59,7 @@ function loadImage(frame, date, row, col) {
     var lastDate=frame.getAttribute('lastDate');
 
     if(date==lastDate) {
-        console.log("Date not changed!");
+        console.log('Date not changed!');
         return;
     }
 
@@ -75,12 +75,12 @@ function showImage() {
 
     var time = (new Date()).getTime();
     if((time-lastUpdate)<UPDATE_INTERVAL) {
-        console.log("To soon!");
+        console.log('To soon!');
         return;
     }
 
     var xmlhttp=new XMLHttpRequest({mozSystem: true});
-    xmlhttp.open("GET", URLS[curModel]['date'], true);
+    xmlhttp.open('GET', URLS[curModel]['date'], true);
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
             var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
@@ -88,7 +88,7 @@ function showImage() {
             frame.setAttribute('lastUpdate', time);
         }
     };
-    xmlhttp.onerror = function () { alert("Can't download"); };
+    xmlhttp.onerror = function () { alert('Can\'t download'); };
     xmlhttp.send();
 }
 
@@ -120,10 +120,10 @@ function setCity(city) {
     if(cities[city]!=undefined) {
         curCity=city;
         document.getElementById('mainTitle').innerHTML=city;
-        document.getElementById('noCityMsg').style.display="none";
+        document.getElementById('noCityMsg').style.display='none';
         setPosition.apply(null, cities[city][curModel]);
     } else {
-        document.getElementById('noCityMsg').style.display="block";
+        document.getElementById('noCityMsg').style.display='block';
     }
 }
 
@@ -138,16 +138,16 @@ function handleVisibilityChange() {
 function configureButtons() {
     function _setDefaultCity() {
         if(curCity==null) {
-            alert("Please choose city");
-        } else if(confirm("Set {0} as default city?".format(curCity))) {
-            localStorage.setItem("default_city", curCity);
+            alert('Please choose city');
+        } else if(confirm('Set {0} as default city?'.format(curCity))) {
+            localStorage.setItem('default_city', curCity);
         }
     }
 
     var setDefaultBtn = document.getElementById('startingCityBtn');
-    setDefaultBtn.addEventListener("click", _setDefaultCity);
+    setDefaultBtn.addEventListener('click', _setDefaultCity);
     var toggleBtn = document.getElementById('toggleBtn');
-    toggleBtn.addEventListener("click", toggleModel);
+    toggleBtn.addEventListener('click', toggleModel);
 }
 
 function toggleModel() {
@@ -165,9 +165,9 @@ function toggleModel() {
     setCity(curCity);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     addCities();
     configureButtons();
-    setCity(localStorage.getItem("default_city"));
+    setCity(localStorage.getItem('default_city'));
 })
