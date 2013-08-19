@@ -21,6 +21,7 @@ var cities={
     'Wrocław': [436, 181],
     'Zielona Góra': [412, 155]
 }
+var curCity=null;
 
 function createFrame() {
     var frame=document.getElementById('frame');
@@ -106,8 +107,14 @@ function addCities() {
 }
 
 function setCity(city) {
-    document.getElementById('mainTitle').innerHTML=city;
-    setPosition.apply(null, cities[city]);
+    if(cities[city]!=undefined) {
+        curCity=city;
+        document.getElementById('mainTitle').innerHTML=city;
+        document.getElementById('noCityMsg').style.display="none";
+        setPosition.apply(null, cities[city]);
+    } else {
+        document.getElementById('noCityMsg').style.display="block";
+    }
 }
 
 function handleVisibilityChange() {
@@ -117,8 +124,23 @@ function handleVisibilityChange() {
     showImage();
 }
 
+
+function configureButtons() {
+    function _setDefaultCity() {
+        if(curCity==null) {
+            alert("Please choose city");
+        } else if(confirm("Set {0} as default city?".format(curCity))) {
+            localStorage.setItem("default_city", curCity);
+        }
+    }
+
+    var setDefaultBtn = document.getElementById('startingCityBtn');
+    setDefaultBtn.addEventListener("click", _setDefaultCity);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     addCities();
-    setCity('Wrocław');
+    configureButtons();
+    setCity(localStorage.getItem("default_city"));
 })

@@ -22,3 +22,9 @@ div[role="main"] {
 div[role="main"] p {
   margin: 2rem 2.5rem;
 }
+
+div[id="noCityMsg"] {
+  display: none;
+  padding-left: 10pt;
+  padding-top: 20pt;
+}
