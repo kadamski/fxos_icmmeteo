@@ -1,27 +1,37 @@
-var MGRAM_URL='http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang=pl';
-var DATE_URL='http://www.meteo.pl/meteorogram_um_js.php'
+var URLS = {
+    'um': {
+        'mgram': 'http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang=pl',
+        'date': 'http://www.meteo.pl/meteorogram_um_js.php'
+    },
+    'coamps': {
+        'mgram': 'http://www.meteo.pl/metco/mgram_pict.php?ntype=2n&fdate={0}&row={1}&col={2}&lang=pl',
+        'date': 'http://www.meteo.pl/meteorogram_coamps_js.php'
+    }
+};
+
 var UPDATE_INTERVAL=(1000*60*60);   // 1h
 var cities={
-    'Białystok': [379, 285],
-    'Bydgoszcz': [381, 199],
-    'Gdańsk': [346, 210],
-    'Gorzów Wielkopolski': [390, 152],
-    'Katowice': [461, 215],
-    'Kielce': [443, 244],
-    'Kraków': [466, 232],
-    'Lublin': [432, 277],
-    'Łódź': [418, 223],
-    'Olsztyn': [363, 240],
-    'Opole': [449, 196],
-    'Poznań': [400, 180],
-    'Rzeszów': [465, 269],
-    'Szczecin': [370, 142],
-    'Toruń': [383, 209],
-    'Warszawa': [406, 250],
-    'Wrocław': [436, 181],
-    'Zielona Góra': [412, 155]
+    'Białystok': {'um': [379, 285], 'coamps': [125, 106]},
+    'Bydgoszcz': {'um': [381, 199], 'coamps': [126, 81]},
+    'Gdańsk': {'um': [346, 210], 'coamps': [115, 84]},
+    'Gorzów Wielkopolski': {'um': [390, 152], 'coamps': [129, 67]},
+    'Katowice': {'um': [461, 215], 'coamps': [150, 85]},
+    'Kielce': {'um': [443, 244], 'coamps': [145, 94]},
+    'Kraków': {'um': [466, 232], 'coamps': [151, 91]},
+    'Lublin': {'um': [432, 277], 'coamps': [141, 104]},
+    'Łódź': {'um': [418, 223], 'coamps': [137, 88]},
+    'Olsztyn': {'um': [363, 240], 'coamps': [120, 93]},
+    'Opole': {'um': [449, 196], 'coamps': [146, 80]},
+    'Poznań': {'um': [400, 180], 'coamps': [132, 75]},
+    'Rzeszów': {'um': [465, 269], 'coamps': [151, 101]},
+    'Szczecin': {'um': [370, 142], 'coamps': [123, 63]},
+    'Toruń': {'um': [383, 209], 'coamps': [127, 84]},
+    'Warszawa': {'um': [406, 250], 'coamps': [133, 96]},
+    'Wrocław': {'um': [436, 181], 'coamps': [143, 75]},
+    'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]}
 }
 var curCity=null;
+var curModel='um';
 
 function createFrame() {
     var frame=document.getElementById('frame');
@@ -54,7 +64,7 @@ function loadImage(frame, date, row, col) {
     }
 
     frame.setAttribute('lastDate', date);
-    frame.src=MGRAM_URL.format(date, row, col);
+    frame.src=URLS[curModel]['mgram'].format(date, row, col);
 }
 
 function showImage() {
@@ -70,10 +80,10 @@ function showImage() {
     }
 
     var xmlhttp=new XMLHttpRequest({mozSystem: true});
-    xmlhttp.open("GET", DATE_URL, true);
+    xmlhttp.open("GET", URLS[curModel]['date'], true);
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-            var date=/UM_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
+            var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
             loadImage(frame, date, row, col);
             frame.setAttribute('lastUpdate', time);
         }
@@ -111,7 +121,7 @@ function setCity(city) {
         curCity=city;
         document.getElementById('mainTitle').innerHTML=city;
         document.getElementById('noCityMsg').style.display="none";
-        setPosition.apply(null, cities[city]);
+        setPosition.apply(null, cities[city][curModel]);
     } else {
         document.getElementById('noCityMsg').style.display="block";
     }
@@ -136,6 +146,23 @@ function configureButtons() {
 
     var setDefaultBtn = document.getElementById('startingCityBtn');
     setDefaultBtn.addEventListener("click", _setDefaultCity);
+    var toggleBtn = document.getElementById('toggleBtn');
+    toggleBtn.addEventListener("click", toggleModel);
+}
+
+function toggleModel() {
+    var modelName=document.getElementById('modelName');
+    if(curModel=='coamps') {
+        curModel='um';
+    } else {
+        curModel='coamps';
+    }
+    modelName.innerHTML=curModel.slice(0,2).toUpperCase();
+
+    var frame=createFrame();
+    frame.setAttribute('lastUpdate', '0');
+    frame.setAttribute('lastDate', '0');
+    setCity(curCity);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
