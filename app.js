@@ -67,7 +67,23 @@ function loadImage(frame, date, row, col) {
     frame.src=URLS[curModel]['mgram'].format(date, row, col);
 }
 
+function downloadError() {
+    var html="Error downloading meteogram."
+    html+="<button id=retry onclick=retry()>retry</button>";
+    var div=document.getElementById('errorMsg');
+    div.innerHTML=html;
+}
+
+function retry() {
+    document.getElementById('errorMsg').innerHTML="";
+    showImage();
+}
+
 function showImage() {
+    if(navigator.onLine===false) {
+        downloadError();
+        return;
+    }
     var frame=createFrame();
     var lastUpdate=frame.getAttribute('lastUpdate');
     var row=frame.getAttribute('lastRow');
@@ -88,7 +104,7 @@ function showImage() {
             frame.setAttribute('lastUpdate', time);
         }
     };
-    xmlhttp.onerror = function () { alert('Can\'t download'); };
+    xmlhttp.onerror = downloadError;
     xmlhttp.send();
 }
 
