@@ -38,10 +38,10 @@ function createFrame() {
     if(!frame) {
         var frame=document.createElement('IFRAME');
         frame.setAttribute('id', 'frame');
-        frame.setAttribute('lastDate', '0');
-        frame.setAttribute('lastUpdate', '0');
-        frame.setAttribute('lastRow', '-1');
-        frame.setAttribute('lastCol', '-1');
+        sessionStorage.setItem('lastDate', '0');
+        sessionStorage.setItem('lastUpdate', '0');
+        sessionStorage.setItem('lastRow', '-1');
+        sessionStorage.setItem('lastCol', '-1');
         frame.style.border='none';
         function _orientChange() {
             var header=document.getElementById('sidebar_title');
@@ -56,14 +56,14 @@ function createFrame() {
 }
 
 function loadImage(frame, date, row, col) {
-    var lastDate=frame.getAttribute('lastDate');
+    var lastDate=sessionStorage.getItem('lastDate');
 
     if(date==lastDate) {
         console.log('Date not changed!');
         return;
     }
 
-    frame.setAttribute('lastDate', date);
+    sessionStorage.setItem('lastDate', date);
     frame.src=URLS[curModel]['mgram'].format(date, row, col);
 }
 
@@ -85,9 +85,9 @@ function showImage() {
         return;
     }
     var frame=createFrame();
-    var lastUpdate=frame.getAttribute('lastUpdate');
-    var row=frame.getAttribute('lastRow');
-    var col=frame.getAttribute('lastCol');
+    var lastUpdate=sessionStorage.getItem('lastUpdate');
+    var row=sessionStorage.getItem('lastRow');
+    var col=sessionStorage.getItem('lastCol');
 
     var time = (new Date()).getTime();
     if((time-lastUpdate)<UPDATE_INTERVAL) {
@@ -101,7 +101,7 @@ function showImage() {
         if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
             var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
             loadImage(frame, date, row, col);
-            frame.setAttribute('lastUpdate', time);
+            sessionStorage.setItem('lastUpdate', time);
         }
     };
     xmlhttp.onerror = downloadError;
@@ -110,16 +110,16 @@ function showImage() {
 
 function setPosition(row, col) {
     var frame=createFrame();
-    var lastRow=frame.getAttribute('lastRow');
-    var lastCol=frame.getAttribute('lastCol');
+    var lastRow=sessionStorage.getItem('lastRow');
+    var lastCol=sessionStorage.getItem('lastCol');
     if(lastRow==row && lastCol==col) {
         console.log('Neighter row nor col changed');
         return;
     }
-    frame.setAttribute('lastUpdate', 0);
-    frame.setAttribute('lastDate', 0);
-    lastRow=frame.setAttribute('lastRow', row);
-    lastCol=frame.setAttribute('lastCol', col);
+    sessionStorage.setItem('lastUpdate', '0');
+    sessionStorage.setItem('lastDate', 0);
+    sessionStorage.setItem('lastRow', row);
+    sessionStorage.setItem('lastCol', col);
     showImage();
 }
 
@@ -176,8 +176,8 @@ function toggleModel() {
     modelName.innerHTML=curModel.slice(0,2).toUpperCase();
 
     var frame=createFrame();
-    frame.setAttribute('lastUpdate', '0');
-    frame.setAttribute('lastDate', '0');
+    sessionStorage.setItem('lastUpdate', '0');
+    sessionStorage.setItem('lastDate', '0');
     setCity(curCity);
 }
 
