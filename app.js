@@ -183,10 +183,13 @@ function handleVisibilityChange() {
 
 function configureButtons() {
     function _setDefaultCity() {
-        if(meteo.city==null) {
+        if(isCityBookmarked()) {
+            ;
+        } else if(meteo.city==null) {
             alert('Please choose city');
         } else if(confirm('Set {0} as default city?'.format(meteo.city))) {
             localStorage.setItem('default_city', meteo.city);
+            setBookmarkIcon();
         }
     }
     function _toggleModel() {
@@ -204,15 +207,33 @@ function configureButtons() {
 
 function badCity() {
     document.getElementById('noCityMsg').style.display='block';
+    document.getElementById('buttons').style.display='none';
+}
+
+function isCityBookmarked() {
+    return (meteo.city && meteo.city==localStorage.getItem('default_city'));
+}
+
+function setBookmarkIcon() {
+    var bookmarkIcon=document.getElementById('bookmarkIcon');
+    var c;
+    if(isCityBookmarked()) {
+        c="icon action-icon bookmarked";
+    } else {
+        c="icon action-icon bookmark";
+    }
+    bookmarkIcon.setAttribute("class", c);
 }
 
 function setCity(city) {
     if(!meteo.setCity(city)) {
         badCity();
-    } else {
-        document.getElementById('mainTitle').innerHTML=city;
-        document.getElementById('noCityMsg').style.display='none';
+        return;
     }
+    document.getElementById('mainTitle').innerHTML=city;
+    document.getElementById('noCityMsg').style.display='none';
+    document.getElementById('buttons').style.display='block';
+    setBookmarkIcon();
 }
 
 function downloadError() {
