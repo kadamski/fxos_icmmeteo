@@ -46,8 +46,7 @@ Meteo.prototype.downloadError = function() {};
 Meteo.prototype.downloadOk = function() {};
 
 Meteo.prototype.toggleModel = function() {
-    var modelName=document.getElementById('modelName');
-    if(this.model=='coamps') {
+    if(this.model==='coamps') {
         this.model='um';
     } else {
         this.model='coamps';
@@ -70,14 +69,14 @@ Meteo.prototype.update = function() {
 };
 
 Meteo.prototype.setCity = function(city) {
-    if(!(city in this._CITIES)) {
+    if(!(this._CITIES.hasOwnProperty(city))) {
         console.log('Unknown city!');
         return false;
     }
 
     this.city=city;
     var pos=this._getCityPosition(city);
-    if(this.row==pos[0] && this.col==pos[1]) {
+    if(this.row===pos[0] && this.col===pos[1]) {
         console.log('Neighter row nor col changed');
         return true;
     }
@@ -85,7 +84,7 @@ Meteo.prototype.setCity = function(city) {
     this.col=pos[1];
     this.showImage(true);
     return true;
-}
+};
 
 Meteo.prototype.showImage=function(force) {
     var time = (new Date()).getTime();
@@ -125,7 +124,7 @@ Meteo.prototype._getCityPosition = function(city) {
 };
 
 Meteo.prototype._loadImage = function(date, force) {
-    if(!force && date==this.lastDate) {
+    if(!force && date===this.lastDate) {
         console.log('Date not changed!');
         return;
     }
@@ -141,10 +140,10 @@ var frame;
 function createFrame() {
     var frame=document.getElementById('frame');
     if(!frame) {
-        var frame=document.createElement('IFRAME');
+        frame=document.createElement('IFRAME');
         frame.setAttribute('id', 'frame');
         frame.style.border='none';
-        function _orientChange() {
+        var _orientChange = function() {
             var header=document.getElementById('sidebar_title');
             frame.style.width=window.screen.width+'px';
             frame.style.height=(window.screen.height-header.clientHeight-10)+'px';
@@ -177,22 +176,24 @@ function handleVisibilityChange() {
 }
 
 function configureButtons() {
-    function _setDefaultCity() {
-        if(isCityBookmarked()) {
-            ;
-        } else if(meteo.city==null) {
+    var _setDefaultCity = function() {
+        if(!isCityBookmarked()) {
+            return;
+        }
+
+        if(meteo.city==null) {
             alert('Please choose city');
         } else if(confirm('Set {0} as default city?'.format(meteo.city))) {
             localStorage.setItem('default_city', meteo.city);
             setBookmarkIcon();
         }
-    }
-    function _toggleModel() {
+    };
+    var _toggleModel = function() {
         var modelName=document.getElementById('modelName');
         var curModel=meteo.toggleModel(); 
 
         modelName.innerHTML=curModel.slice(0,2).toUpperCase();
-    }
+    };
 
     var setDefaultBtn = document.getElementById('startingCityBtn');
     setDefaultBtn.addEventListener('click', _setDefaultCity);
