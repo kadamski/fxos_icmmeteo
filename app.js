@@ -43,6 +43,7 @@ Meteo.prototype._CITIES = {
 };
 
 Meteo.prototype.downloadError = function() {};
+Meteo.prototype.downloadOk = function() {};
 
 Meteo.prototype.toggleModel = function() {
     var modelName=document.getElementById('modelName');
@@ -110,6 +111,7 @@ Meteo.prototype.showImage=function(force) {
             var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
             that._loadImage(date, force);
             that.lastUpdate=time;
+            that.downloadOk();
         } else {
             this.onerror();
         }
@@ -134,6 +136,7 @@ Meteo.prototype._loadImage = function(date, force) {
 
 //////////////////////////////////////////////////////////////////
 var meteo;
+var frame;
 
 function createFrame() {
     var frame=document.getElementById('frame');
@@ -153,15 +156,7 @@ function createFrame() {
     return frame;
 }
 
-function downloadError() {
-    var html="Error downloading meteogram."
-    html+="<button id=retry onclick=retry()>retry</button>";
-    var div=document.getElementById('errorMsg');
-    div.innerHTML=html;
-}
-
 function retry() {
-    document.getElementById('errorMsg').innerHTML="";
     meteo.update();
 }
 
@@ -236,18 +231,23 @@ function setCity(city) {
     setBookmarkIcon();
 }
 
+function downloadOk() {
+    document.getElementById('errorMsg').style.display='none';
+    frame.style.display='block';
+}
+
 function downloadError() {
-    var html="Error downloading meteogram."
-    html+="<button id=retry onclick=retry()>retry</button>";
     var div=document.getElementById('errorMsg');
-    div.innerHTML=html;
+    div.style.display='block';
+    frame.style.display='none';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    var frame=createFrame();
+    frame=createFrame();
     meteo = new Meteo(frame);
     meteo.downloadError=downloadError;
+    meteo.downloadOk=downloadOk;
     addCities();
     configureButtons();
     setCity(localStorage.getItem('default_city'));
