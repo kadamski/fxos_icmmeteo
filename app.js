@@ -1,4 +1,40 @@
-var URLS = {
+function Meteo(frame) {
+    this.frame=frame;
+    this.city=null;
+    this.model='um';
+    this.lastUpdate='0';
+    this.lastDate='0';
+    this.row='-1';
+    this.col='-1';
+}
+Meteo.prototype.toggleModel = function() {
+    var modelName=document.getElementById('modelName');
+    if(this.model=='coamps') {
+        this.model='um';
+    } else {
+        this.model='coamps';
+    }
+    if(this.city!==null) {
+        this.update();
+    }
+    return this.model;
+};
+Meteo.prototype.downloadError = function() {
+};
+Meteo.prototype.getCities = function() {
+    return Object.keys(this._CITIES).sort();
+};
+Meteo.prototype.update = function() {
+    var pos=this._getCityPosition(this.city);
+    this.row=pos[0];
+    this.col=pos[1];
+    this.showImage(true);
+};
+Meteo.prototype._getCityPosition = function(city) {
+    return this._CITIES[city][this.model];
+};
+
+Meteo.prototype._URLS = {
     'um': {
         'mgram': 'http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang=pl',
         'date': 'http://www.meteo.pl/meteorogram_um_js.php'
@@ -8,9 +44,8 @@ var URLS = {
         'date': 'http://www.meteo.pl/meteorogram_coamps_js.php'
     }
 };
-
-var UPDATE_INTERVAL=(1000*60*60);   // 1h
-var cities={
+Meteo.prototype.UPDATE_INTERVAL=(1000*60*60);
+Meteo.prototype._CITIES = {
     'Białystok': {'um': [379, 285], 'coamps': [125, 106]},
     'Bydgoszcz': {'um': [381, 199], 'coamps': [126, 81]},
     'Gdańsk': {'um': [346, 210], 'coamps': [115, 84]},
@@ -29,19 +64,13 @@ var cities={
     'Warszawa': {'um': [406, 250], 'coamps': [133, 96]},
     'Wrocław': {'um': [436, 181], 'coamps': [143, 75]},
     'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]}
-}
-var curCity=null;
-var curModel='um';
+};
 
 function createFrame() {
     var frame=document.getElementById('frame');
     if(!frame) {
         var frame=document.createElement('IFRAME');
         frame.setAttribute('id', 'frame');
-        sessionStorage.setItem('lastDate', '0');
-        sessionStorage.setItem('lastUpdate', '0');
-        sessionStorage.setItem('lastRow', '-1');
-        sessionStorage.setItem('lastCol', '-1');
         frame.style.border='none';
         function _orientChange() {
             var header=document.getElementById('sidebar_title');
@@ -55,17 +84,15 @@ function createFrame() {
     return frame;
 }
 
-function loadImage(frame, date, row, col) {
-    var lastDate=sessionStorage.getItem('lastDate');
-
-    if(date==lastDate) {
+Meteo.prototype._loadImage = function(date, force) {
+    if(!force && date==this.lastDate) {
         console.log('Date not changed!');
         return;
     }
+    this.date=date;
+    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col);
 
-    sessionStorage.setItem('lastDate', date);
-    frame.src=URLS[curModel]['mgram'].format(date, row, col);
-}
+};
 
 function downloadError() {
     var html="Error downloading meteogram."
@@ -76,113 +103,121 @@ function downloadError() {
 
 function retry() {
     document.getElementById('errorMsg').innerHTML="";
-    showImage();
+    meteo.update();
 }
 
-function showImage() {
-    if(navigator.onLine===false) {
-        downloadError();
-        return;
-    }
-    var frame=createFrame();
-    var lastUpdate=sessionStorage.getItem('lastUpdate');
-    var row=sessionStorage.getItem('lastRow');
-    var col=sessionStorage.getItem('lastCol');
-
+Meteo.prototype.showImage=function(force) {
     var time = (new Date()).getTime();
-    if((time-lastUpdate)<UPDATE_INTERVAL) {
+
+    if(!force && (time-this.lastUpdate)<this.UPDATE_INTERVAL) {
         console.log('To soon!');
         return;
     }
 
-    var xmlhttp=new XMLHttpRequest({mozSystem: true});
-    xmlhttp.open('GET', URLS[curModel]['date'], true);
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.status === 200 && xmlhttp.readyState === 4) {
-            var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
-            loadImage(frame, date, row, col);
-            sessionStorage.setItem('lastUpdate', time);
-        }
-    };
-    xmlhttp.onerror = downloadError;
-    xmlhttp.send();
-}
-
-function setPosition(row, col) {
-    var frame=createFrame();
-    var lastRow=sessionStorage.getItem('lastRow');
-    var lastCol=sessionStorage.getItem('lastCol');
-    if(lastRow==row && lastCol==col) {
-        console.log('Neighter row nor col changed');
+    if(navigator.onLine===false) {
+        this.downloadError();
         return;
     }
-    sessionStorage.setItem('lastUpdate', '0');
-    sessionStorage.setItem('lastDate', 0);
-    sessionStorage.setItem('lastRow', row);
-    sessionStorage.setItem('lastCol', col);
-    showImage();
-}
+
+    var xmlhttp=new XMLHttpRequest({mozSystem: true});
+    var that=this;
+    xmlhttp.open('GET', this._URLS[this.model]['date'], true);
+    xmlhttp.onreadystatechange = function () {
+        if(xmlhttp.readyState !== 4) {
+            return;
+        }
+        if (xmlhttp.status === 200) {
+            var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
+            that._loadImage(date, force);
+            that.lastUpdate=time;
+        } else {
+            this.onerror();
+        }
+    };
+    xmlhttp.onerror = this.downloadError;
+    xmlhttp.send();
+};
 
 function addCities() {
     var ul=document.getElementById('citiesUl');
-    var cityNames=Object.keys(cities).sort();
+    var cityNames=meteo.getCities();
     for(var i=0, len=cityNames.length; i<len; i++) {
         var c=cityNames[i];
         ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c);
     }
 }
 
-function setCity(city) {
-    if(cities[city]!=undefined) {
-        curCity=city;
-        document.getElementById('mainTitle').innerHTML=city;
-        document.getElementById('noCityMsg').style.display='none';
-        setPosition.apply(null, cities[city][curModel]);
-    } else {
-        document.getElementById('noCityMsg').style.display='block';
+Meteo.prototype.setCity = function(city) {
+    if(!(city in this._CITIES)) {
+        console.log('Unknown city!');
+        return false;
     }
+
+    this.city=city;
+    var pos=this._getCityPosition(city);
+    if(this.row==pos[0] && this.col==pos[1]) {
+        console.log('Neighter row nor col changed');
+        return true;
+    }
+    this.row=pos[0];
+    this.col=pos[1];
+    this.showImage(true);
+    return true;
 }
 
 function handleVisibilityChange() {
     if(document.hidden) {
         return;
     }
-    showImage();
+    meteo.showImage(false);
 }
-
 
 function configureButtons() {
     function _setDefaultCity() {
-        if(curCity==null) {
+        if(meteo.city==null) {
             alert('Please choose city');
-        } else if(confirm('Set {0} as default city?'.format(curCity))) {
-            localStorage.setItem('default_city', curCity);
+        } else if(confirm('Set {0} as default city?'.format(meteo.city))) {
+            localStorage.setItem('default_city', meteo.city);
         }
+    }
+    function _toggleModel() {
+        var modelName=document.getElementById('modelName');
+        var curModel=meteo.toggleModel(); 
+
+        modelName.innerHTML=curModel.slice(0,2).toUpperCase();
     }
 
     var setDefaultBtn = document.getElementById('startingCityBtn');
     setDefaultBtn.addEventListener('click', _setDefaultCity);
     var toggleBtn = document.getElementById('toggleBtn');
-    toggleBtn.addEventListener('click', toggleModel);
+    toggleBtn.addEventListener('click', _toggleModel);
 }
 
-function toggleModel() {
-    var modelName=document.getElementById('modelName');
-    if(curModel=='coamps') {
-        curModel='um';
-    } else {
-        curModel='coamps';
-    }
-    modelName.innerHTML=curModel.slice(0,2).toUpperCase();
+function badCity() {
+    document.getElementById('noCityMsg').style.display='block';
+}
 
-    var frame=createFrame();
-    sessionStorage.setItem('lastUpdate', '0');
-    sessionStorage.setItem('lastDate', '0');
-    setCity(curCity);
+function setCity(city) {
+    if(!meteo.setCity(city)) {
+        badCity();
+    } else {
+        document.getElementById('mainTitle').innerHTML=city;
+        document.getElementById('noCityMsg').style.display='none';
+    }
+}
+
+function downloadError() {
+    var html="Error downloading meteogram."
+    html+="<button id=retry onclick=retry()>retry</button>";
+    var div=document.getElementById('errorMsg');
+    div.innerHTML=html;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    var frame=createFrame();
+    meteo = new Meteo(frame);
+    meteo.downloadError=downloadError;
     addCities();
     configureButtons();
     setCity(localStorage.getItem('default_city'));
