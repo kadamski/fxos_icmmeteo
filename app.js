@@ -7,32 +7,8 @@ function Meteo(frame) {
     this.row='-1';
     this.col='-1';
 }
-Meteo.prototype.toggleModel = function() {
-    var modelName=document.getElementById('modelName');
-    if(this.model=='coamps') {
-        this.model='um';
-    } else {
-        this.model='coamps';
-    }
-    if(this.city!==null) {
-        this.update();
-    }
-    return this.model;
-};
-Meteo.prototype.downloadError = function() {
-};
-Meteo.prototype.getCities = function() {
-    return Object.keys(this._CITIES).sort();
-};
-Meteo.prototype.update = function() {
-    var pos=this._getCityPosition(this.city);
-    this.row=pos[0];
-    this.col=pos[1];
-    this.showImage(true);
-};
-Meteo.prototype._getCityPosition = function(city) {
-    return this._CITIES[city][this.model];
-};
+
+Meteo.prototype.UPDATE_INTERVAL=(1000*60*60);
 
 Meteo.prototype._URLS = {
     'um': {
@@ -44,7 +20,7 @@ Meteo.prototype._URLS = {
         'date': 'http://www.meteo.pl/meteorogram_coamps_js.php'
     }
 };
-Meteo.prototype.UPDATE_INTERVAL=(1000*60*60);
+
 Meteo.prototype._CITIES = {
     'Białystok': {'um': [379, 285], 'coamps': [125, 106]},
     'Bydgoszcz': {'um': [381, 199], 'coamps': [126, 81]},
@@ -66,44 +42,48 @@ Meteo.prototype._CITIES = {
     'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]}
 };
 
-function createFrame() {
-    var frame=document.getElementById('frame');
-    if(!frame) {
-        var frame=document.createElement('IFRAME');
-        frame.setAttribute('id', 'frame');
-        frame.style.border='none';
-        function _orientChange() {
-            var header=document.getElementById('sidebar_title');
-            frame.style.width=window.screen.width+'px';
-            frame.style.height=(window.screen.height-header.clientHeight-10)+'px';
-        };
-        screen.addEventListener('mozorientationchange', _orientChange);
-        _orientChange();
-        document.getElementById('mainDiv').appendChild(frame);
-    }
-    return frame;
-}
+Meteo.prototype.downloadError = function() {};
 
-Meteo.prototype._loadImage = function(date, force) {
-    if(!force && date==this.lastDate) {
-        console.log('Date not changed!');
-        return;
+Meteo.prototype.toggleModel = function() {
+    var modelName=document.getElementById('modelName');
+    if(this.model=='coamps') {
+        this.model='um';
+    } else {
+        this.model='coamps';
     }
-    this.date=date;
-    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col);
-
+    if(this.city!==null) {
+        this.update();
+    }
+    return this.model;
 };
 
-function downloadError() {
-    var html="Error downloading meteogram."
-    html+="<button id=retry onclick=retry()>retry</button>";
-    var div=document.getElementById('errorMsg');
-    div.innerHTML=html;
-}
+Meteo.prototype.getCities = function() {
+    return Object.keys(this._CITIES).sort();
+};
 
-function retry() {
-    document.getElementById('errorMsg').innerHTML="";
-    meteo.update();
+Meteo.prototype.update = function() {
+    var pos=this._getCityPosition(this.city);
+    this.row=pos[0];
+    this.col=pos[1];
+    this.showImage(true);
+};
+
+Meteo.prototype.setCity = function(city) {
+    if(!(city in this._CITIES)) {
+        console.log('Unknown city!');
+        return false;
+    }
+
+    this.city=city;
+    var pos=this._getCityPosition(city);
+    if(this.row==pos[0] && this.col==pos[1]) {
+        console.log('Neighter row nor col changed');
+        return true;
+    }
+    this.row=pos[0];
+    this.col=pos[1];
+    this.showImage(true);
+    return true;
 }
 
 Meteo.prototype.showImage=function(force) {
@@ -138,6 +118,53 @@ Meteo.prototype.showImage=function(force) {
     xmlhttp.send();
 };
 
+Meteo.prototype._getCityPosition = function(city) {
+    return this._CITIES[city][this.model];
+};
+
+Meteo.prototype._loadImage = function(date, force) {
+    if(!force && date==this.lastDate) {
+        console.log('Date not changed!');
+        return;
+    }
+    this.date=date;
+    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col);
+
+};
+
+//////////////////////////////////////////////////////////////////
+var meteo;
+
+function createFrame() {
+    var frame=document.getElementById('frame');
+    if(!frame) {
+        var frame=document.createElement('IFRAME');
+        frame.setAttribute('id', 'frame');
+        frame.style.border='none';
+        function _orientChange() {
+            var header=document.getElementById('sidebar_title');
+            frame.style.width=window.screen.width+'px';
+            frame.style.height=(window.screen.height-header.clientHeight-10)+'px';
+        };
+        screen.addEventListener('mozorientationchange', _orientChange);
+        _orientChange();
+        document.getElementById('mainDiv').appendChild(frame);
+    }
+    return frame;
+}
+
+function downloadError() {
+    var html="Error downloading meteogram."
+    html+="<button id=retry onclick=retry()>retry</button>";
+    var div=document.getElementById('errorMsg');
+    div.innerHTML=html;
+}
+
+function retry() {
+    document.getElementById('errorMsg').innerHTML="";
+    meteo.update();
+}
+
 function addCities() {
     var ul=document.getElementById('citiesUl');
     var cityNames=meteo.getCities();
@@ -145,24 +172,6 @@ function addCities() {
         var c=cityNames[i];
         ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c);
     }
-}
-
-Meteo.prototype.setCity = function(city) {
-    if(!(city in this._CITIES)) {
-        console.log('Unknown city!');
-        return false;
-    }
-
-    this.city=city;
-    var pos=this._getCityPosition(city);
-    if(this.row==pos[0] && this.col==pos[1]) {
-        console.log('Neighter row nor col changed');
-        return true;
-    }
-    this.row=pos[0];
-    this.col=pos[1];
-    this.showImage(true);
-    return true;
 }
 
 function handleVisibilityChange() {
