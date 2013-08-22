@@ -230,11 +230,16 @@ function configureButtons() {
 
         modelName.innerHTML=curModel.slice(0,2).toUpperCase();
     };
+    var _about = function() {
+        alert("ICM Meteo by Krzysztof Adamski <k@japko.eu>");
+    };
 
     var setDefaultBtn = document.getElementById('startingCityBtn');
     setDefaultBtn.addEventListener('click', _setDefaultCity);
     var toggleBtn = document.getElementById('toggleBtn');
     toggleBtn.addEventListener('click', _toggleModel);
+    var aboutBtn = document.getElementById('aboutBtn');
+    aboutBtn.addEventListener('click', _about);
 }
 
 function badCity() {
