@@ -6,17 +6,18 @@ function Meteo(frame) {
     this.lastDate='0';
     this.row='-1';
     this.col='-1';
+    this.lang='en';
 }
 
 Meteo.prototype.UPDATE_INTERVAL=(1000*60*60);
 
 Meteo.prototype._URLS = {
     'um': {
-        'mgram': 'http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang=pl',
+        'mgram': 'http://www.meteo.pl/um/metco/mgram_pict.php?ntype=0u&fdate={0}&row={1}&col={2}&lang={3}',
         'date': 'http://www.meteo.pl/meteorogram_um_js.php'
     },
     'coamps': {
-        'mgram': 'http://www.meteo.pl/metco/mgram_pict.php?ntype=2n&fdate={0}&row={1}&col={2}&lang=pl',
+        'mgram': 'http://www.meteo.pl/metco/mgram_pict.php?ntype=2n&fdate={0}&row={1}&col={2}&lang={3}',
         'date': 'http://www.meteo.pl/meteorogram_coamps_js.php'
     }
 };
@@ -161,7 +162,7 @@ Meteo.prototype._loadImage = function(date, force) {
         return;
     }
     this.date=date;
-    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col);
+    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col, this.lang);
 
 };
 
