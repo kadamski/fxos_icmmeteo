@@ -39,7 +39,26 @@ Meteo.prototype._CITIES = {
     'Toruń': {'um': [383, 209], 'coamps': [127, 84]},
     'Warszawa': {'um': [406, 250], 'coamps': [133, 96]},
     'Wrocław': {'um': [436, 181], 'coamps': [143, 75]},
-    'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]}
+    'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]},
+
+    'Berlin': {'um': [394, 121], 'coamps': [130, 57]},
+    'Bratysława': {'um': [519, 179], 'coamps': [167, 75]},
+    'Budapeszt': {'um': [537, 216], 'coamps': [-1, -1]},
+    'Helsinki': {'um': [182, 299], 'coamps': [65, 111]},
+    'Kijów': {'um': [440, 418], 'coamps': [144, 146]},
+    'Kiszyniów': {'um': [539, 402], 'coamps': [173, 141]},
+    'Kopenhaga': {'um': [305, 115], 'coamps': [103, 55]},
+    'Lichtenstein': {'um': [535, 35], 'coamps': [172, 32]},
+    'Lublana': {'um': [574, 127], 'coamps': [184, 59]},
+    'Mińsk': {'um': [352, 355], 'coamps': [117, 128]},
+    'Oslo': {'um': [185, 101], 'coamps': [67, 50]},
+    'Praga': {'um': [462, 133], 'coamps': [150, 61]},
+    'Ryga': {'um': [272, 294], 'coamps': [93, 109]},
+    'Sztokholm': {'um': [209, 203], 'coamps': [74, 82]},
+    'Tallinn': {'um': [203, 298], 'coamps': [72, 111]},
+    'Wiedeń': {'um': [516, 166], 'coamps': [166, 71]},
+    'Wilno': {'um': [334, 316], 'coamps': [112, 116]},
+    'Zagrzeb': {'um': [583, 155], 'coamps': [186, 68]}
 };
 
 Meteo.prototype.downloadError = function() {};
