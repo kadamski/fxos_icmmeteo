@@ -22,43 +22,43 @@ Meteo.prototype._URLS = {
 };
 
 Meteo.prototype._CITIES = {
-    'Białystok': {'um': [379, 285], 'coamps': [125, 106]},
-    'Bydgoszcz': {'um': [381, 199], 'coamps': [126, 81]},
-    'Gdańsk': {'um': [346, 210], 'coamps': [115, 84]},
-    'Gorzów Wielkopolski': {'um': [390, 152], 'coamps': [129, 67]},
-    'Katowice': {'um': [461, 215], 'coamps': [150, 85]},
-    'Kielce': {'um': [443, 244], 'coamps': [145, 94]},
-    'Kraków': {'um': [466, 232], 'coamps': [151, 91]},
-    'Lublin': {'um': [432, 277], 'coamps': [141, 104]},
-    'Łódź': {'um': [418, 223], 'coamps': [137, 88]},
-    'Olsztyn': {'um': [363, 240], 'coamps': [120, 93]},
-    'Opole': {'um': [449, 196], 'coamps': [146, 80]},
-    'Poznań': {'um': [400, 180], 'coamps': [132, 75]},
-    'Rzeszów': {'um': [465, 269], 'coamps': [151, 101]},
-    'Szczecin': {'um': [370, 142], 'coamps': [123, 63]},
-    'Toruń': {'um': [383, 209], 'coamps': [127, 84]},
-    'Warszawa': {'um': [406, 250], 'coamps': [133, 96]},
-    'Wrocław': {'um': [436, 181], 'coamps': [143, 75]},
-    'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68]},
+    'Białystok': {'um': [379, 285], 'coamps': [125, 106], 'capital': false},
+    'Bydgoszcz': {'um': [381, 199], 'coamps': [126, 81], 'capital': false},
+    'Gdańsk': {'um': [346, 210], 'coamps': [115, 84], 'capital': false},
+    'Gorzów Wielkopolski': {'um': [390, 152], 'coamps': [129, 67], 'capital': false},
+    'Katowice': {'um': [461, 215], 'coamps': [150, 85], 'capital': false},
+    'Kielce': {'um': [443, 244], 'coamps': [145, 94], 'capital': false},
+    'Kraków': {'um': [466, 232], 'coamps': [151, 91], 'capital': false},
+    'Lublin': {'um': [432, 277], 'coamps': [141, 104], 'capital': false},
+    'Łódź': {'um': [418, 223], 'coamps': [137, 88], 'capital': false},
+    'Olsztyn': {'um': [363, 240], 'coamps': [120, 93], 'capital': false},
+    'Opole': {'um': [449, 196], 'coamps': [146, 80], 'capital': false},
+    'Poznań': {'um': [400, 180], 'coamps': [132, 75], 'capital': false},
+    'Rzeszów': {'um': [465, 269], 'coamps': [151, 101], 'capital': false},
+    'Szczecin': {'um': [370, 142], 'coamps': [123, 63], 'capital': false},
+    'Toruń': {'um': [383, 209], 'coamps': [127, 84], 'capital': false},
+    'Warszawa': {'um': [406, 250], 'coamps': [133, 96], 'capital': false},
+    'Wrocław': {'um': [436, 181], 'coamps': [143, 75], 'capital': false},
+    'Zielona Góra': {'um': [412, 155], 'coamps': [135, 68], 'capital': false},
 
-    'Berlin': {'um': [394, 121], 'coamps': [130, 57]},
-    'Bratysława': {'um': [519, 179], 'coamps': [167, 75]},
-    'Budapeszt': {'um': [537, 216], 'coamps': [-1, -1]},
-    'Helsinki': {'um': [182, 299], 'coamps': [65, 111]},
-    'Kijów': {'um': [440, 418], 'coamps': [144, 146]},
-    'Kiszyniów': {'um': [539, 402], 'coamps': [173, 141]},
-    'Kopenhaga': {'um': [305, 115], 'coamps': [103, 55]},
-    'Lichtenstein': {'um': [535, 35], 'coamps': [172, 32]},
-    'Lublana': {'um': [574, 127], 'coamps': [184, 59]},
-    'Mińsk': {'um': [352, 355], 'coamps': [117, 128]},
-    'Oslo': {'um': [185, 101], 'coamps': [67, 50]},
-    'Praga': {'um': [462, 133], 'coamps': [150, 61]},
-    'Ryga': {'um': [272, 294], 'coamps': [93, 109]},
-    'Sztokholm': {'um': [209, 203], 'coamps': [74, 82]},
-    'Tallinn': {'um': [203, 298], 'coamps': [72, 111]},
-    'Wiedeń': {'um': [516, 166], 'coamps': [166, 71]},
-    'Wilno': {'um': [334, 316], 'coamps': [112, 116]},
-    'Zagrzeb': {'um': [583, 155], 'coamps': [186, 68]}
+    'Berlin': {'um': [394, 121], 'coamps': [130, 57], 'capital': true},
+    'Bratysława': {'um': [519, 179], 'coamps': [167, 75], 'capital': true},
+    'Budapeszt': {'um': [537, 216], 'coamps': [-1, -1], 'capital': true},
+    'Helsinki': {'um': [182, 299], 'coamps': [65, 111], 'capital': true},
+    'Kijów': {'um': [440, 418], 'coamps': [144, 146], 'capital': true},
+    'Kiszyniów': {'um': [539, 402], 'coamps': [173, 141], 'capital': true},
+    'Kopenhaga': {'um': [305, 115], 'coamps': [103, 55], 'capital': true},
+    'Lichtenstein': {'um': [535, 35], 'coamps': [172, 32], 'capital': true},
+    'Lublana': {'um': [574, 127], 'coamps': [184, 59], 'capital': true},
+    'Mińsk': {'um': [352, 355], 'coamps': [117, 128], 'capital': true},
+    'Oslo': {'um': [185, 101], 'coamps': [67, 50], 'capital': true},
+    'Praga': {'um': [462, 133], 'coamps': [150, 61], 'capital': true},
+    'Ryga': {'um': [272, 294], 'coamps': [93, 109], 'capital': true},
+    'Sztokholm': {'um': [209, 203], 'coamps': [74, 82], 'capital': true},
+    'Tallinn': {'um': [203, 298], 'coamps': [72, 111], 'capital': true},
+    'Wiedeń': {'um': [516, 166], 'coamps': [166, 71], 'capital': true},
+    'Wilno': {'um': [334, 316], 'coamps': [112, 116], 'capital': true},
+    'Zagrzeb': {'um': [583, 155], 'coamps': [186, 68], 'capital': true}
 };
 
 Meteo.prototype.downloadError = function() {};
@@ -76,8 +76,21 @@ Meteo.prototype.toggleModel = function() {
     return this.model;
 };
 
-Meteo.prototype.getCities = function() {
-    return Object.keys(this._CITIES).sort();
+Meteo.prototype.getCities = function(capital) {
+    var c=Object.keys(this._CITIES).sort(), ret, i;
+
+    if(typeof capital === 'undefined') {
+        ret = c;
+    } else {
+        ret=[];
+        for(i=0; i<c.length; i++) {
+            if((capital===this._CITIES[c[i]].capital)) {
+                ret.push(c[i]); 
+            };
+        } 
+    }
+    console.log(ret);
+    return ret;
 };
 
 Meteo.prototype.update = function() {
@@ -179,12 +192,15 @@ function retry() {
 }
 
 function addCities() {
-    var ul=document.getElementById('citiesUl');
-    var cityNames=meteo.getCities();
-    for(var i=0, len=cityNames.length; i<len; i++) {
-        var c=cityNames[i];
-        ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c);
+    var _helper = function(ul, c) {
+        var i,c;
+        for(i=0, len=c.length; i<len; i++) {
+            ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c[i]);
+        }
     }
+
+    _helper(document.getElementById('citiesUl'), meteo.getCities(false));
+    _helper(document.getElementById('capitalsUl'), meteo.getCities(true));
 }
 
 function handleVisibilityChange() {
