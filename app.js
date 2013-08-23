@@ -44,14 +44,16 @@ function handleVisibilityChange() {
 
 function configureButtons() {
     var _setDefaultCity = function() {
+        var curCity;
         if(isCityBookmarked()) {
             return;
         }
 
-        if(meteo.city==null) {
+        curCity=meteo.currentCity();
+        if(curCity==null) {
             alert('Please choose city');
-        } else if(confirm('Set {0} as default city?'.format(meteo.city))) {
-            localStorage.setItem('default_city', meteo.city);
+        } else if(confirm('Set {0} as default city?'.format(curCity))) {
+            localStorage.setItem('default_city', curCity);
             setBookmarkIcon();
         }
     };
@@ -79,7 +81,8 @@ function badCity() {
 }
 
 function isCityBookmarked() {
-    return (meteo.city && meteo.city===localStorage.getItem('default_city'));
+    var curCity=meteo.currentCity();
+    return (curCity && curCity===localStorage.getItem('default_city'));
 }
 
 function setBookmarkIcon() {
