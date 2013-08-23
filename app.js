@@ -62,9 +62,6 @@ Meteo.prototype._CITIES = {
     'Zagrzeb': {'um': [583, 155], 'coamps': [186, 68], 'capital': true}
 };
 
-Meteo.prototype.downloadError = function() {};
-Meteo.prototype.downloadOk = function() {};
-
 Meteo.prototype.toggleModel = function() {
     if(this.model==='coamps') {
         this.model='um';
@@ -128,7 +125,7 @@ Meteo.prototype.showImage=function(force) {
     }
 
     if(navigator.onLine===false) {
-        this.downloadError();
+        this.frame.dispatchEvent(new Event('downloadError'));
         return;
     }
 
@@ -143,12 +140,12 @@ Meteo.prototype.showImage=function(force) {
             var date=/_FULLDATE="([0-9]{10})"/.exec(xmlhttp.response)[1];
             that._loadImage(date, force);
             that.lastUpdate=time;
-            that.downloadOk();
+            that.frame.dispatchEvent(new Event('downloadOk'));
         } else {
             this.onerror();
         }
     };
-    xmlhttp.onerror = this.downloadError;
+    xmlhttp.onerror = function() { that.frame.dispatchEvent(new Event('downloadError')); };
     xmlhttp.send();
 };
 
@@ -162,7 +159,7 @@ Meteo.prototype._loadImage = function(date, force) {
         return;
     }
     this.date=date;
-    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col, this.lang);
+    this.frame.src=this._URLS[this.model]['mgram'].format(this.date, this.row, this.col, this.lang, this.city);
 
 };
 
@@ -287,9 +284,9 @@ function downloadError() {
 document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     frame=createFrame();
+    frame.addEventListener('downloadError', downloadError);
+    frame.addEventListener('downloadOk', downloadOk);
     meteo = new Meteo(frame);
-    meteo.downloadError=downloadError;
-    meteo.downloadOk=downloadOk;
     addCities();
     configureButtons();
     setCity(localStorage.getItem('default_city'));
