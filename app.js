@@ -44,7 +44,7 @@ function handleVisibilityChange() {
 
 function configureButtons() {
     var _setDefaultCity = function() {
-        if(!isCityBookmarked()) {
+        if(isCityBookmarked()) {
             return;
         }
 
@@ -79,7 +79,7 @@ function badCity() {
 }
 
 function isCityBookmarked() {
-    return (meteo.city && meteo.city==localStorage.getItem('default_city'));
+    return (meteo.city && meteo.city===localStorage.getItem('default_city'));
 }
 
 function setBookmarkIcon() {
