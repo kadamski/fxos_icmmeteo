@@ -1,3 +1,4 @@
+var app = (function(Meteo) {
 var meteo;
 var frame;
 
@@ -126,7 +127,7 @@ function downloadError() {
     frame.style.display='none';
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function init() {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     frame=createFrame();
     frame.addEventListener('downloadError', downloadError);
@@ -135,4 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
     addCities();
     configureButtons();
     setCity(localStorage.getItem('default_city'));
+}
+
+return {
+    'init': init
+};
+})(Meteo);
+
+document.addEventListener('DOMContentLoaded', function () {
+    app.init();
 })
