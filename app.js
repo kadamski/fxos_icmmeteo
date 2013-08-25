@@ -2,7 +2,7 @@ var app = (function(Meteo) {
     var meteo;
     var frame;
 
-    function createFrame() {
+    var createFrame = function () {
         var frame=document.getElementById('frame');
         if(!frame) {
             frame=document.createElement('IFRAME');
@@ -18,13 +18,13 @@ var app = (function(Meteo) {
             document.getElementById('mainDiv').appendChild(frame);
         }
         return frame;
-    }
+    };
 
-    function retry() {
+    var retry = function () {
         meteo.update();
-    }
+    };
 
-    function addCities() {
+    var addCities = function () {
         var _helper = function(ul, c) {
             var i,c,html="";
             for(i=0, len=c.length; i<len; i++) {
@@ -42,16 +42,16 @@ var app = (function(Meteo) {
                 setCity(c);
             }
         });
-    }
+    };
 
-    function handleVisibilityChange() {
+    var handleVisibilityChange = function () {
         if(document.hidden) {
             return;
         }
         meteo.showImage(false);
-    }
+    };
 
-    function configureButtons() {
+    var configureButtons = function () {
         var _setDefaultCity = function() {
             var curCity;
             if(isCityBookmarked()) {
@@ -82,19 +82,19 @@ var app = (function(Meteo) {
         toggleBtn.addEventListener('click', _toggleModel);
         var aboutBtn = document.getElementById('aboutBtn');
         aboutBtn.addEventListener('click', _about);
-    }
+    };
 
-    function badCity() {
+    var badCity = function () {
         document.getElementById('noCityMsg').style.display='block';
         document.getElementById('buttons').style.display='none';
-    }
+    };
 
-    function isCityBookmarked() {
+    var isCityBookmarked = function () {
         var curCity=meteo.currentCity();
         return (curCity && curCity===localStorage.getItem('default_city'));
-    }
+    };
 
-    function setBookmarkIcon() {
+    var setBookmarkIcon = function () {
         var bookmarkIcon=document.getElementById('bookmarkIcon');
         var c;
         if(isCityBookmarked()) {
@@ -103,9 +103,9 @@ var app = (function(Meteo) {
             c="icon action-icon bookmark";
         }
         bookmarkIcon.setAttribute("class", c);
-    }
+    };
 
-    function setCity(city) {
+    var setCity = function (city) {
         if(!meteo.setCity(city)) {
             badCity();
             return;
@@ -114,20 +114,20 @@ var app = (function(Meteo) {
         document.getElementById('noCityMsg').style.display='none';
         document.getElementById('buttons').style.display='block';
         setBookmarkIcon();
-    }
+    };
 
-    function downloadOk() {
+    var downloadOk = function () {
         document.getElementById('errorMsg').style.display='none';
         frame.style.display='block';
-    }
+    };
 
-    function downloadError() {
+    var downloadError = function () {
         var div=document.getElementById('errorMsg');
         div.style.display='block';
         frame.style.display='none';
-    }
+    };
 
-    function init() {
+    var init = function () {
         document.addEventListener('visibilitychange', handleVisibilityChange);
         frame=createFrame();
         frame.addEventListener('downloadError', downloadError);
@@ -136,7 +136,7 @@ var app = (function(Meteo) {
         addCities();
         configureButtons();
         setCity(localStorage.getItem('default_city'));
-    }
+    };
 
     return {
         'init': init
@@ -145,4 +145,4 @@ var app = (function(Meteo) {
 
 document.addEventListener('DOMContentLoaded', function () {
     app.init();
-})
+});
