@@ -4,6 +4,10 @@
     "launch_path": "index.html",
     "installs_allowed_from": ["*"],
     "version": "0.0.1",
+    "icons": {
+        "60": "/img/icon60.png",
+        "128": "/img/icon128.png"
+    },
     "developer": {
         "name": "Krzysztof Adamski",
         "url": "http://k.japko.eu/"
