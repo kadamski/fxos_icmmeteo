@@ -1,7 +1,7 @@
 {
-    "name": "ICMMeteo",
-    "description": "Meteo test",
-    "launch_path": "index.html",
+    "name": "ICM Meteo",
+    "description": "Meteo",
+    "launch_path": "/index.html",
     "icons": {
         "60": "/img/icon60.png",
         "128": "/img/icon128.png"
@@ -14,9 +14,11 @@
     "version": "0.1.0",
     "type" : "privileged",
     "permissions": {
-        "systemXHR": {},
+        "systemXHR": {
+            "description": "Downloading remote webpage to get information about newest weather image avaiable."
+        },
         "storage": {
-            "description": "Storing configuration"
+            "description": "Storing configuration."
         }
     }
 }
