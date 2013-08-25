@@ -85,6 +85,8 @@ var app = (function(Meteo) {
         toggleBtn.addEventListener('click', _toggleModel);
         var aboutBtn = document.getElementById('aboutBtn');
         aboutBtn.addEventListener('click', _about);
+        var retryBtn = document.getElementById('retryBtn');
+        retryBtn.addEventListener('click', retry);
     };
 
     var badCity = function () {
