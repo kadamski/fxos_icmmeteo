@@ -25,14 +25,22 @@ function retry() {
 
 function addCities() {
     var _helper = function(ul, c) {
-        var i,c;
+        var i,c,html="";
         for(i=0, len=c.length; i<len; i++) {
-            ul.innerHTML+='<li><a href="#" onclick=\'setCity("{0}")\'>{0}</a></li>'.format(c[i]);
+            html+='<li><a href="#" data-city="{0}">{0}</a></li>'.format(c[i]);
         }
+        ul.innerHTML+=html;
     }
 
     _helper(document.getElementById('citiesUl'), meteo.getCities(false));
     _helper(document.getElementById('capitalsUl'), meteo.getCities(true));
+
+    document.getElementById('cities').addEventListener('click', function (e) {
+        var c=e.target.getAttribute('data-city');
+        if(c) {
+            setCity(c);
+        }
+    });
 }
 
 function handleVisibilityChange() {
