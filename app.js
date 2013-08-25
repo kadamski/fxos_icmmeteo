@@ -1,4 +1,6 @@
 var app = (function(Meteo) {
+    'use strict';
+
     var meteo;
     var frame;
 
@@ -26,7 +28,7 @@ var app = (function(Meteo) {
 
     var addCities = function () {
         var _helper = function(ul, c) {
-            var i,c,html="";
+            var i, c, len, html="";
             for(i=0, len=c.length; i<len; i++) {
                 html+='<li><a href="#" data-city="{0}">{0}</a></li>'.format(c[i]);
             }
