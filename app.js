@@ -1,6 +1,7 @@
 var app = (function(Meteo) {
     'use strict';
 
+    var VERSION='0.1.0';
     var meteo;
     var frame;
 
@@ -75,7 +76,7 @@ var app = (function(Meteo) {
             modelName.innerHTML=curModel.slice(0,2).toUpperCase();
         };
         var _about = function() {
-            alert("ICM Meteo by Krzysztof Adamski <k@japko.eu>");
+            alert("ICM Meteo\nby Krzysztof Adamski\nversion "+VERSION);
         };
 
         var setDefaultBtn = document.getElementById('startingCityBtn');

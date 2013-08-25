@@ -1,9 +1,7 @@
 {
-    "name": "Meteotest",
+    "name": "ICMMeteo",
     "description": "Meteo test",
     "launch_path": "index.html",
-    "installs_allowed_from": ["*"],
-    "version": "0.0.1",
     "icons": {
         "60": "/img/icon60.png",
         "128": "/img/icon128.png"
@@ -12,9 +10,13 @@
         "name": "Krzysztof Adamski",
         "url": "http://k.japko.eu/"
     },
+    "default_locale": "en",
+    "version": "0.1.0",
     "type" : "privileged",
     "permissions": {
-        "systemXHR":{},
-        "storage":{ "description": "blah" }
+        "systemXHR": {},
+        "storage": {
+            "description": "Storing configuration"
+        }
     }
 }
