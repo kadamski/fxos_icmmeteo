@@ -15,6 +15,8 @@ CONTENT=(
     Building-Blocks/style_unstable/drawer/
     Building-Blocks/icons/styles/action_icons.css
     Building-Blocks/icons/styles/action_icons.png
+    locales/locales.ini
+    webL10n/l10n.js
 )
 
 zip -Xr fxos_icmmeteo.zip ${CONTENT[*]}
