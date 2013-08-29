@@ -1,4 +1,4 @@
-var app = (function(Meteo) {
+var app = (function(Meteo, _) {
     'use strict';
 
     var VERSION='0.1.0';
@@ -29,9 +29,10 @@ var app = (function(Meteo) {
 
     var addCities = function () {
         var _helper = function(ul, c) {
-            var i, c, len, html="";
+            var i, c, len, html="", localized;
             for(i=0, len=c.length; i<len; i++) {
-                html+='<li><a href="#" data-city="{0}">{0}</a></li>'.format(c[i]);
+                localized=_(c[i]) || c[i];
+                html+='<li><a href="#" data-city="{0}">{1}</a></li>'.format(c[i], localized);
             }
             ul.innerHTML+=html;
         }
@@ -63,8 +64,8 @@ var app = (function(Meteo) {
 
             curCity=meteo.currentCity();
             if(curCity==null) {
-                alert('Please choose city');
-            } else if(confirm('Set {0} as default city?'.format(curCity))) {
+                alert(_('choose_city_warning'));
+            } else if(confirm(_('set_default', {'city': curCity}))) {
                 localStorage.setItem('default_city', curCity);
                 setBookmarkIcon();
             }
@@ -76,7 +77,7 @@ var app = (function(Meteo) {
             modelName.innerHTML=curModel.slice(0,2).toUpperCase();
         };
         var _about = function() {
-            alert("ICM Meteo\nby Krzysztof Adamski\nversion "+VERSION);
+            alert(_('about')+' '+VERSION);
         };
 
         var setDefaultBtn = document.getElementById('startingCityBtn');
@@ -144,10 +145,11 @@ var app = (function(Meteo) {
     };
 
     return {
-        'init': init
+        'init': init,
+        'a': addCities
     };
-})(Meteo);
+})(Meteo, document.webL10n.get);
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('localized', function () {
     app.init();
 });

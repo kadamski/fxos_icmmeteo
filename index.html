@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
 
+    <link rel="prefetch" type="application/l10n" href="locales/locales.ini" />
+    <script type="text/javascript" src="webL10n/l10n.js"></script>
+
     <title></title>
     <meta name="description" content="Meteo test">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" /> 
@@ -17,13 +20,13 @@
         <menu type="toolbar">
            <button id="aboutBtn"><span>?</span></button>
         </menu>
-        <h1 id="sidebar_title">Cities</h1>
+        <h1 id="sidebar_title" data-l10n-id="cities">Cities</h1>
       </header>
       <nav id="cities">
-        <h2>Poland:</h2>
+        <h2 data-l10n-id="poland">Poland:</h2>
         <ul id="citiesUl">
         </ul>
-        <h2>Other:</h2>
+        <h2 data-l10n-id="other">Other:</h2>
         <ul id="capitalsUl">
         </ul>
       </nav>
@@ -40,9 +43,9 @@
         <h1 id="mainTitle"></h1>
       </header>
       <div role="main" id="mainDiv">
-       <div id="noCityMsg"> &lt;-- Choose city </div>
-       <div class=error id="errorMsg">
-         Error downloading meteogram.<button id="retryBtn">retry</button>
+       <div id="noCityMsg" data-l10n-id="choose_city"> &lt;-- Choose city </div>
+       <div class=error id="errorMsg" data-l10n-id="error_download">
+         Error downloading meteogram.<button id="retryBtn" data-l10n-id="retry">retry</button>
        </div>
       </div>
     </section>
