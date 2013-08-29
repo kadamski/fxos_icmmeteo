@@ -1,7 +1,7 @@
 var app = (function(Meteo, _) {
     'use strict';
 
-    var VERSION='0.1.0';
+    var VERSION='0.1.1';
     var meteo;
     var frame;
 
