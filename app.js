@@ -1,7 +1,7 @@
 var app = (function(Meteo, _) {
     'use strict';
 
-    var VERSION='0.1.1';
+    var VERSION=null;
     var meteo;
     var frame;
 
@@ -133,7 +133,17 @@ var app = (function(Meteo, _) {
         frame.style.display='none';
     };
 
+    var getVersion = function () {
+        var request = window.navigator.mozApps.getSelf();
+        request.onsuccess = function () {
+            if(this.result) {
+                VERSION = this.result.manifest.version;
+            }
+        };
+    };
+
     var init = function () {
+        getVersion();
         document.addEventListener('visibilitychange', handleVisibilityChange);
         frame=createFrame();
         frame.addEventListener('downloadError', downloadError);
